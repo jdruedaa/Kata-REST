@@ -39,6 +39,6 @@ class GalleryTestCase(TestCase):
         self.assertEqual(current_data[0]['fields']['username'],'testUser')
 
     def test_list_portafolio_status(self):
-        url = '/portfolios'
+        url = '/gallery/portfolios/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)

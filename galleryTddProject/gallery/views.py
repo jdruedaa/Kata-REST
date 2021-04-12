@@ -6,11 +6,13 @@ from django.core import serializers
 from .models import Image
 import json
 
+
 # Create your views here.
 @csrf_exempt
 def index(request):
     images_list = Image.objects.all()
     return HttpResponse(serializers.serialize("json", images_list))
+
 
 @csrf_exempt
 def add_user_view(request):
@@ -28,3 +30,9 @@ def add_user_view(request):
         user_model.email = email
         user_model.save()
     return HttpResponse(serializers.serialize("json", [user_model]))
+
+
+@csrf_exempt
+def list_portfolios(request):
+    portfolios_list = []
+    return HttpResponse(serializers.serialize("json", portfolios_list))
