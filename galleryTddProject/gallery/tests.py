@@ -4,7 +4,7 @@ import requests
 
 
 # Create your tests here.
-from .models import Image, Portfolio
+from .models import Image, Portfolio, Portfolio_Image
 import json
 
 # Create your tests here.
@@ -48,15 +48,16 @@ class GalleryTestCase(TestCase):
         user_model = User.objects.create_user(username='test', password='kd8wke-DE34', first_name='test', last_name='test', email='test@test.com')
         img1 = Image.objects.create(name='nuevo', url='No', description='testImage', type='jpg', user=user_model)
         img2 = Image.objects.create(name='nuevo2', url='No', description='testImage', type='jpg', user=user_model)
-        p1 = Portfolio.objects.create(privacidades=["publico", "privado"], user=user_model)
-        p1.imagenes.add(img1.id)
-        p1.imagenes.add(img2.id)
-        p2 = Portfolio.objects.create(privacidades=["publico", "privado"], user=user_model)
-        p2.imagenes.add(img1.id)
-        p2.imagenes.add(img2.id)
+        p1 = Portfolio.objects.create(user=user_model)
+        Portfolio_Image.objects.create(imagen=img1, privacidad=0, portfolio=p1)
+        Portfolio_Image.objects.create(imagen=img2, privacidad=1, portfolio=p1)
+        p2 = Portfolio.objects.create(user=user_model)
+        Portfolio_Image.objects.create(imagen=img1, privacidad=1, portfolio=p2)
+        Portfolio_Image.objects.create(imagen=img2, privacidad=0, portfolio=p2)
 
         response = self.client.get('/gallery/portfolios/')
         current_data = json.loads(response.content)
+        print(current_data)
         self.assertEqual(len(current_data), 2)
 
     def test_add_user2(self):
@@ -68,14 +69,15 @@ class GalleryTestCase(TestCase):
         user_model = User.objects.create_user(username='test', password='kd8wke-DE34', first_name='test', last_name='test', email='test@test.com')
         img1 = Image.objects.create(name='nuevo', url='No', description='testImage', type='jpg', user=user_model)
         img2 = Image.objects.create(name='nuevo2', url='No', description='testImage', type='jpg', user=user_model)
-        p1 = Portfolio.objects.create(privacidades=["publico", "privado"], user=user_model)
-        p1.imagenes.add(img1.id)
-        p1.imagenes.add(img2.id)
-        p2 = Portfolio.objects.create(privacidades=["privado", "publico"], user=user_model)
-        p2.imagenes.add(img1.id)
-        p2.imagenes.add(img2.id)
+        p1 = Portfolio.objects.create(user=user_model)
+        Portfolio_Image.objects.create(imagen=img1, privacidad=0, portfolio=p1)
+        Portfolio_Image.objects.create(imagen=img2, privacidad=1, portfolio=p1)
+        p2 = Portfolio.objects.create(user=user_model)
+        Portfolio_Image.objects.create(imagen=img1, privacidad=1, portfolio=p2)
+        Portfolio_Image.objects.create(imagen=img2, privacidad=0, portfolio=p2)
 
         response = self.client.get('/gallery/portfolios/')
         current_data = json.loads(response.content)
-        self.assertEqual(current_data[0]['fields']['imagenes'],'[3]')
-        self.assertEqual(current_data[1]['fields']['imagenes'],'[4]')
+        print(current_data)
+        self.assertEqual(current_data[0]['fields']['imagen'],3)
+        self.assertEqual(current_data[1]['fields']['imagen'],4)

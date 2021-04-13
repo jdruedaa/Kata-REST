@@ -13,6 +13,10 @@ class Image(models.Model):
 
 
 class Portfolio(models.Model):
-    imagenes = models.ManyToManyField(Image)
-    privacidades = ArrayField(models.CharField(max_length=50))
     user = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
+
+
+class Portfolio_Image(models.Model):
+    imagen = models.ForeignKey(Image, null=True, on_delete=models.PROTECT)
+    privacidad = models.IntegerField()
+    portfolio = models.ForeignKey(Portfolio, null=True, on_delete=models.PROTECT)
