@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'galleryTddProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dbgallerytdd',
+        'NAME': 'dbgallery',
         'USER': 'usdbgallery',
         'PASSWORD': 'Abcd123#',
         'HOST': 'localhost',

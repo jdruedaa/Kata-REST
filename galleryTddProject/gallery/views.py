@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
-from .models import Image
+from .models import Image, Portfolio
 import json
 
 
@@ -34,5 +34,5 @@ def add_user_view(request):
 
 @csrf_exempt
 def list_portfolios(request):
-    portfolios_list = []
+    portfolios_list = Portfolio.objects.all()
     return HttpResponse(serializers.serialize("json", portfolios_list))
