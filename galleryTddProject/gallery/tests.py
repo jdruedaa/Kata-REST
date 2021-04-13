@@ -63,3 +63,19 @@ class GalleryTestCase(TestCase):
         response=self.client.post('/gallery/addUser/',json.dumps({"username": "testUser", "first_name": "Test", "last_name": "User", "password": "AnyPas#5", "email": "test@test.com"}), content_type='application/json')
         current_data=json.loads(response.content)
         self.assertEqual(current_data[0]['fields']['username'],'testUser')
+
+    def test_portfolios_public_data(self):
+        user_model = User.objects.create_user(username='test', password='kd8wke-DE34', first_name='test', last_name='test', email='test@test.com')
+        img1 = Image.objects.create(name='nuevo', url='No', description='testImage', type='jpg', user=user_model)
+        img2 = Image.objects.create(name='nuevo2', url='No', description='testImage', type='jpg', user=user_model)
+        p1 = Portfolio.objects.create(privacidades=["publico", "privado"], user=user_model)
+        p1.imagenes.add(img1.id)
+        p1.imagenes.add(img2.id)
+        p2 = Portfolio.objects.create(privacidades=["privado", "publico"], user=user_model)
+        p2.imagenes.add(img1.id)
+        p2.imagenes.add(img2.id)
+
+        response = self.client.get('/gallery/portfolios/')
+        current_data = json.loads(response.content)
+        self.assertEqual(current_data[0]['fields']['imagenes'],'[3]')
+        self.assertEqual(current_data[1]['fields']['imagenes'],'[4]')
