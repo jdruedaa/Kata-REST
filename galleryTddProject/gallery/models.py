@@ -14,6 +14,8 @@ class Image(models.Model):
 
 class Portfolio(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
+    imagenesPublicas = models.ManyToManyField(Image, related_name='imagenesPublicas')
+    imagenesInv = models.ManyToManyField(Image, through='Portfolio_Image', related_name='imagenesInv')
 
 
 class Portfolio_Image(models.Model):
