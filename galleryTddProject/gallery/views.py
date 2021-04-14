@@ -35,15 +35,10 @@ def add_user_view(request):
 
 @csrf_exempt
 def list_portfolios(request):
-    # public_list = Portfolio_Image.objects.filter(privacidad=1)
     portfolios_list = Portfolio.objects.all()
-    print(portfolios_list.values())
     for i in portfolios_list:
-        publicimgs = Portfolio_Image.objects.filter(portfolio_id=i.id, privacidad=1)
-        print(publicimgs.values())
-        for j in publicimgs:
-            i.imagenesPublicas.add(j.imagen)
-        print(i.imagenesPublicas.values())
+        publicimgs = Image.objects.filter(portfolio_image__portfolio_id=i.id, portfolio_image__privacidad=1)
+        i.imagenesPublicas.set(publicimgs)
     return HttpResponse(serializers.serialize("json", portfolios_list))
 
 @csrf_exempt
