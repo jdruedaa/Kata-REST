@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .models import Image, Portfolio, Portfolio_Image
 import json
+from django.contrib.auth import authenticate, login
 
 
 # Create your views here.
@@ -37,3 +38,17 @@ def list_portfolios(request):
     #public_list = Portfolio_Image.objects.filter(privacidad=1)
     portfolios_list = Portfolio_Image.objects.filter(privacidad=1).select_related('portfolio')
     return HttpResponse(serializers.serialize("json", portfolios_list))
+
+@csrf_exempt
+def log_user_view(request):
+    
+    if request.method == 'POST':
+        json_user = json.loads(request.body)
+        username = json_user['username']
+        password = json_user['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+           login(request, user)
+    return HttpResponse(serializers.serialize("json", [user]))
+    
+    
