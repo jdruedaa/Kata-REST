@@ -70,7 +70,7 @@ class GalleryTestCase(TestCase):
         user_model = User.objects.create_user(username='test3', password='12345', first_name='test3', last_name='test3', email='test3@test.com')
         login = self.client.login(username='test3', password='12345')
         url = '/gallery/loguser/'
-        response=self.client.post(url, json.dumps({"username": "test3", "password": "123456"}), content_type='application/json')
+        response=self.client.post(url, json.dumps({"username": "test3", "password": "12345"}), content_type='application/json')
         current_data=json.loads(response.content)
         self.assertEqual(current_data[0]['fields']['username'],'test3')
         self.assertEqual(response.status_code, 200)
